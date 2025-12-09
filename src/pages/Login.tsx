@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { GraduationCap, LogIn, UserPlus, AlertCircle } from "lucide-react";
+import { LogIn, UserPlus, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 import { loginSchema, registerSchema } from "@/lib/validation";
 
@@ -15,21 +15,21 @@ const Login = () => {
   const navigate = useNavigate();
   const { login, register, currentUser, loading } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
-  
+
   // Login state
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
   const [loginErrors, setLoginErrors] = useState<{ email?: string; password?: string }>({});
-  
+
   // Register state
   const [registerName, setRegisterName] = useState("");
   const [registerEmail, setRegisterEmail] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
   const [registerRole, setRegisterRole] = useState<"teacher" | "student">("student");
-  const [registerErrors, setRegisterErrors] = useState<{ 
-    name?: string; 
-    email?: string; 
-    password?: string 
+  const [registerErrors, setRegisterErrors] = useState<{
+    name?: string;
+    email?: string;
+    password?: string
   }>({});
 
   useEffect(() => {
@@ -55,7 +55,7 @@ const Login = () => {
 
     setIsLoading(true);
     const { error } = await login(loginEmail, loginPassword);
-    
+
     if (error) {
       toast.error(error.message || "Invalid credentials. Please try again.");
       setIsLoading(false);
@@ -88,14 +88,14 @@ const Login = () => {
 
     setIsLoading(true);
     const { error } = await register(registerName, registerEmail, registerPassword, registerRole);
-    
+
     if (error) {
       toast.error(error.message || "Registration failed. Please try again.");
       setIsLoading(false);
     } else {
       toast.success(
-        registerRole === "teacher" 
-          ? "Registration successful! Waiting for admin approval." 
+        registerRole === "teacher"
+          ? "Registration successful! Waiting for admin approval."
           : "Registration successful!"
       );
     }
@@ -105,8 +105,13 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-muted/30 to-background p-4">
       <Card className="w-full max-w-md shadow-lg border-border/50">
         <CardHeader className="text-center space-y-2">
-          <div className="mx-auto w-12 h-12 bg-primary rounded-full flex items-center justify-center mb-2">
-            <GraduationCap className="w-6 h-6 text-primary-foreground" />
+          <div className="mx-auto w-24 h-24 bg-primary rounded-full flex items-center justify-center mb-2">
+            {/* <GraduationCap className="w-6 h-6 text-primary-foreground" /> */}
+            <img
+              src="/logo.png"
+              alt="Logo"
+              className="w-full h-full object-cover rounded-full" // Added classes to fit the container
+            />
           </div>
           <CardTitle className="text-2xl font-bold">Counselling Portal</CardTitle>
           <CardDescription>Connect students with teachers for academic guidance</CardDescription>

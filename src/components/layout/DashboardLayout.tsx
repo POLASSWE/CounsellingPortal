@@ -2,12 +2,12 @@ import { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
-import { 
-  LayoutDashboard, 
-  Users, 
-  BookOpen, 
-  Calendar, 
-  CheckSquare, 
+import {
+  LayoutDashboard,
+  Users,
+  BookOpen,
+  Calendar,
+  CheckSquare,
   LogOut,
   GraduationCap,
   BookMarked,
@@ -70,7 +70,12 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-sidebar-primary rounded-full flex items-center justify-center">
-              <GraduationCap className="w-5 h-5 text-sidebar-primary-foreground" />
+              {/* <GraduationCap className="w-5 h-5 text-sidebar-primary-foreground" /> */}
+              <img
+                src="/logo.png"
+                alt="Logo"
+                className="w-full h-full object-cover rounded-full" // Added classes to fit the container
+              />
             </div>
             <div>
               <h1 className="text-lg font-bold text-sidebar-foreground">Counselling Portal</h1>
