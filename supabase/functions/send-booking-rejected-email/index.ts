@@ -8,7 +8,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-interface BookingApprovedRequest {
+interface BookingRejectedRequest {
   studentEmail: string;
   studentName: string;
   teacherName: string;
@@ -18,7 +18,7 @@ interface BookingApprovedRequest {
 }
 
 const handler = async (req: Request): Promise<Response> => {
-  console.log("send-booking-approved-email function called");
+  console.log("send-booking-rejected-email function called");
 
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -32,22 +32,22 @@ const handler = async (req: Request): Promise<Response> => {
       courseName, 
       bookingDate, 
       bookingTime 
-    }: BookingApprovedRequest = await req.json();
+    }: BookingRejectedRequest = await req.json();
     
-    console.log(`Sending booking approval email to student: ${studentEmail}`);
+    console.log(`Sending booking rejection email to student: ${studentEmail}`);
 
     const emailResponse = await resend.emails.send({
       from: "EduBook <onboarding@resend.dev>",
       to: [studentEmail],
-      subject: "Your Booking Has Been Approved!",
+      subject: "Booking Request Update",
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h1 style="color: #10B981;">Booking Confirmed!</h1>
+          <h1 style="color: #EF4444;">Booking Not Approved</h1>
           <p style="font-size: 16px; color: #374151;">
             Hi ${studentName},
           </p>
           <p style="font-size: 16px; color: #374151;">
-            Your booking request has been approved! Here are the details:
+            Unfortunately, your booking request could not be approved. Here were the details:
           </p>
           <div style="background-color: #F3F4F6; padding: 20px; border-radius: 8px; margin: 20px 0;">
             <p style="margin: 8px 0;"><strong>Course:</strong> ${courseName}</p>
@@ -56,12 +56,12 @@ const handler = async (req: Request): Promise<Response> => {
             <p style="margin: 8px 0;"><strong>Time:</strong> ${bookingTime}</p>
           </div>
           <p style="font-size: 16px; color: #374151;">
-            Please make sure to be available at the scheduled time.
+            The teacher may not be available at the requested time. Please try booking a different slot.
           </p>
           <div style="margin-top: 24px;">
-            <a href="${Deno.env.get("SITE_URL") || "https://nzgijrsgwhxdfktvmyvf.lovableproject.com"}/dashboard/my-bookings" 
-               style="background-color: #10B981; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px;">
-              View My Bookings
+            <a href="${Deno.env.get("SITE_URL") || "https://nzgijrsgwhxdfktvmyvf.lovableproject.com"}/dashboard/book-session" 
+               style="background-color: #3B82F6; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px;">
+              Book Another Session
             </a>
           </div>
           <p style="margin-top: 32px; font-size: 14px; color: #6B7280;">
@@ -77,12 +77,12 @@ const handler = async (req: Request): Promise<Response> => {
       status: 200,
       headers: { "Content-Type": "application/json", ...corsHeaders },
     });
-  } catch (error: any) {
-    console.error("Error sending booking approved email:", error);
+  } catch (error) {
+    console.error("Error sending booking rejected email:", error);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error }),
       { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
-    );
+    );  
   }
 };
 

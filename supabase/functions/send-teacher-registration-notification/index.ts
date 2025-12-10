@@ -8,7 +8,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-interface TeacherApprovalRequest {
+interface TeacherRejectionRequest {
   teacherName: string;
   teacherEmail: string;
 }
@@ -17,17 +17,17 @@ const handler = async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const { teacherName, teacherEmail }: TeacherApprovalRequest = await req.json();
+    const { teacherName, teacherEmail }: TeacherRejectionRequest = await req.json();
 
     const data = await resend.emails.send({
       from: "EduBook <onboarding@resend.dev>",
       to: [teacherEmail],
-      subject: "Application Approved!",
+      subject: "Application Update",
       html: `
-        <h1>Welcome to EduBook, ${teacherName}!</h1>
-        <p>We are excited to let you know that your teacher application has been <strong>approved</strong>.</p>
-        <p>You can now log in, set up your profile, and start creating course slots.</p>
-        <a href="${Deno.env.get("SITE_URL") ?? "https://your-site.com"}/login" style="background: #3B82F6; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Login Now</a>
+        <h1>Application Update</h1>
+        <p>Hi ${teacherName},</p>
+        <p>Thank you for your interest in EduBook. After reviewing your application, we regret to inform you that we cannot move forward with your profile at this time.</p>
+        <p>If you have any questions, please contact support.</p>
       `,
     });
 

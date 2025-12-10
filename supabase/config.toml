@@ -1,9 +1,22 @@
-project_id = "nzgijrsgwhxdfktvmyvf"
+project_id = "YOUR_PROJECT_ID" # Replace with your actual project ID
+
+[functions.send-teacher-registration-notification]
+verify_jwt = false
 
 [functions.send-teacher-approval-email]
+verify_jwt = false
+
+[functions.send-teacher-rejection-email]
+verify_jwt = false
+
+[functions.send-new-booking-notification]
 verify_jwt = false
 
 [functions.send-booking-approved-email]
 verify_jwt = false
 
+[functions.send-booking-rejected-email]
+verify_jwt = false
 
+[functions.send-booking-reminder]
+verify_jwt = false
