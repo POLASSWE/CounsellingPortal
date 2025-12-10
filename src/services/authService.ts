@@ -14,14 +14,14 @@ export const authService = {
     name: string,
     email: string,
     password: string,
-    role: "teacher" | "student"
+    role: "teacher" | "student",
   ) {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
         data: { name, role },
-        emailRedirectTo: `${window.location.origin}/dashboard`,
+        emailRedirectTo: "https://counselling-portal-chi.vercel.app/dashboard",
       },
     });
     return { data, error };

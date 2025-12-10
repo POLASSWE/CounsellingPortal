@@ -1,5 +1,11 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { User, Session } from "@supabase/supabase-js";
+import React, {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { UserWithRole } from "@/types";
 
@@ -10,7 +16,12 @@ interface AuthContextType {
   loading: boolean;
   login: (email: string, password: string) => Promise<{ error: any }>;
   logout: () => Promise<void>;
-  register: (name: string, email: string, password: string, role: "teacher" | "student") => Promise<{ error: any }>;
+  register: (
+    name: string,
+    email: string,
+    password: string,
+    role: "teacher" | "student",
+  ) => Promise<{ error: any }>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -61,7 +72,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           .select("*")
           .eq("user_id", userId)
           .single();
-        
+
         teacher = teacherData || undefined;
       }
 
@@ -82,7 +93,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       (event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
-        
+
         if (session?.user) {
           setTimeout(() => {
             fetchUserData(session.user.id);
@@ -90,20 +101,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         } else {
           setCurrentUser(null);
         }
-        
+
         setLoading(false);
-      }
+      },
     );
 
     // Check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
-      
+
       if (session?.user) {
         fetchUserData(session.user.id);
       }
-      
+
       setLoading(false);
     });
 
@@ -127,7 +138,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     name: string,
     email: string,
     password: string,
-    role: "teacher" | "student"
+    role: "teacher" | "student",
   ) => {
     // Sign up the user - role assignment and teacher creation handled by database trigger
     const { error } = await supabase.auth.signUp({
@@ -138,7 +149,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           name,
           role,
         },
-        emailRedirectTo: `${window.location.origin}/dashboard`,
+        // emailRedirectTo: `${window.location.origin}/dashboard`,
+        emailRedirectTo: "https://counselling-portal-chi.vercel.app/dashboard",
       },
     });
 
@@ -146,7 +158,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, session, currentUser, loading, login, logout, register }}>
+    <AuthContext.Provider
+      value={{ user, session, currentUser, loading, login, logout, register }}
+    >
       {children}
     </AuthContext.Provider>
   );
